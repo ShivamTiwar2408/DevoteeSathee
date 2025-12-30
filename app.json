@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "DevoteeSathee",
+    "slug": "devoteesathee",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#E91E63"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.devoteesathee.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#E91E63"
+      },
+      "package": "com.devoteesathee.app"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
