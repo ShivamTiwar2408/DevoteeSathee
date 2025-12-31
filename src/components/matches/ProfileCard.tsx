@@ -64,7 +64,7 @@ export function ProfileCard({ match, onConnect, onChat, isConnecting, showVideo,
         <View style={styles.media}>
           {match.introVideo && showVideo ? (
             <>
-              <Video ref={videoRef} source={{ uri: match.introVideo }} style={styles.video} resizeMode={ResizeMode.COVER} shouldPlay isLooping isMuted={isMuted} onPlaybackStatusUpdate={onStatus} />
+              <Video ref={videoRef} source={{ uri: match.introVideo }} style={styles.video} resizeMode={ResizeMode.COVER} shouldPlay isLooping isMuted={isMuted} onPlaybackStatusUpdate={onStatus} progressUpdateIntervalMillis={500} usePoster posterSource={{ uri: match.photo }} posterStyle={styles.photo} />
               {isVideoLoading && <View style={styles.videoLoading}><Image source={{ uri: match.photo }} style={styles.photo} /><View style={styles.loadingOverlay}><ActivityIndicator size="large" color="#fff" /></View></View>}
               <View style={styles.videoControls}>
                 <TouchableOpacity style={styles.ctrlBtn} onPress={togglePlay}><Ionicons name={isPlaying ? "pause" : "play"} size={18} color="#fff" /></TouchableOpacity>
