@@ -4,7 +4,7 @@ import { StatusBar } from 'expo-status-bar';
 import { 
   HomeScreen, 
   ChatScreen, 
-  ProfileEditScreen, 
+  ProfileScreen, 
   InboxScreen, 
   ChatListScreen,
   SplashScreen 
@@ -96,7 +96,7 @@ export default function App() {
         return <ChatListScreen onOpenChat={handleOpenChat} />;
       case 'profile':
         return (
-          <ProfileEditScreen 
+          <ProfileScreen 
             profile={profile} 
             onSave={updateProfile} 
             isSaving={isSaving} 

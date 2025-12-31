@@ -26,15 +26,20 @@ interface SwipeableProfilesProps {
 export function SwipeableProfiles({ matches, onChat }: SwipeableProfilesProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [connectingId, setConnectingId] = useState<string | null>(null);
+  const [preferVideo, setPreferVideo] = useState(true); // Global preference
   const flatListRef = useRef<FlatList>(null);
 
-  const handleConnect = useCallback(async (match: Match) => {
+  const toggleMediaPreference = useCallback(() => {
+    setPreferVideo(prev => !prev);
+  }, []);
+
+  const handleConnect = useCallback(async (match: Match, message?: string) => {
     setConnectingId(match.id);
     try {
       await matchesApi.sendInterest(match.id);
       Alert.alert(
         'Request Sent! 💕',
-        `Your connection request has been sent to ${match.name}.`,
+        `Your connection request has been sent to ${match.name}.\n\nMessage: "${message}"`,
         [{ text: 'OK' }]
       );
     } catch (err) {
@@ -72,12 +77,14 @@ export function SwipeableProfiles({ matches, onChat }: SwipeableProfilesProps) {
     <View style={styles.cardWrapper}>
       <ProfileCard
         match={item}
-        onConnect={() => handleConnect(item)}
+        onConnect={(message) => handleConnect(item, message)}
         onChat={() => onChat(item)}
         isConnecting={connectingId === item.id}
+        showVideo={preferVideo}
+        onToggleMedia={toggleMediaPreference}
       />
     </View>
-  ), [connectingId, handleConnect, onChat]);
+  ), [connectingId, handleConnect, onChat, preferVideo, toggleMediaPreference]);
 
   const getItemLayout = useCallback((_: unknown, index: number) => ({
     length: CARD_WIDTH + SPACING.xs,
@@ -98,7 +105,7 @@ export function SwipeableProfiles({ matches, onChat }: SwipeableProfilesProps) {
   return (
     <View style={styles.container}>
       {/* Counter */}
-      <View style={styles.counterContainer}>
+      <View style={styles.headerRow}>
         <Text style={styles.counterText}>{currentIndex + 1} / {matches.length}</Text>
       </View>
 
@@ -146,9 +153,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  counterContainer: {
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: SPACING.xs,
+    paddingHorizontal: SPACING.md,
   },
   counterText: {
     fontSize: FONT_SIZE.xs,
