@@ -78,7 +78,7 @@ function SelectField({ label, value, options, onSelect }: SelectFieldProps) {
         onPress={() => setExpanded(!expanded)}
       >
         <Text style={[styles.selectText, !value && styles.selectPlaceholder]}>
-          {value || `Select ${label}`}
+          {value || 'Select ' + label}
         </Text>
         <Ionicons 
           name={expanded ? 'chevron-up' : 'chevron-down'} 
@@ -138,7 +138,6 @@ export function ProfileEditScreen({ profile, onSave, isSaving }: ProfileEditScre
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Profile Photo */}
       <View style={styles.photoSection}>
         <Image source={{ uri: formData.photo }} style={styles.photo} />
         <TouchableOpacity style={styles.changePhotoBtn}>
@@ -148,7 +147,6 @@ export function ProfileEditScreen({ profile, onSave, isSaving }: ProfileEditScre
         <Text style={styles.photoHint}>Add up to 6 photos to get more responses</Text>
       </View>
 
-      {/* Basic Information */}
       <Section title="Basic Information">
         <Field label="Full Name" value={formData.name} onChangeText={(v) => updateField('name', v)} />
         <Field label="Age" value={String(formData.age)} onChangeText={(v) => updateField('age', v)} keyboardType="numeric" />
@@ -161,7 +159,6 @@ export function ProfileEditScreen({ profile, onSave, isSaving }: ProfileEditScre
         />
       </Section>
 
-      {/* Religious Background */}
       <Section title="Religious Background">
         <SelectField 
           label="Religion" 
@@ -173,13 +170,11 @@ export function ProfileEditScreen({ profile, onSave, isSaving }: ProfileEditScre
         <Field label="Mother Tongue" value={formData.motherTongue || ''} onChangeText={(v) => updateField('motherTongue', v)} />
       </Section>
 
-      {/* Location */}
       <Section title="Location">
         <Field label="Current City" value={formData.place} onChangeText={(v) => updateField('place', v)} />
       </Section>
 
-      {/* Education & Career */}
-      <Section title="Education & Career">
+      <Section title="Education and Career">
         <Field label="Highest Education" value={formData.education} onChangeText={(v) => updateField('education', v)} />
         <Field label="Profession" value={formData.profession} onChangeText={(v) => updateField('profession', v)} />
         <SelectField 
@@ -188,21 +183,19 @@ export function ProfileEditScreen({ profile, onSave, isSaving }: ProfileEditScre
           options={['Working', 'Not Working', 'Student']}
           onSelect={(v) => updateField('workingStatus', v as Profile['workingStatus'])}
         />
-        <Field label="Annual Income" value={formData.salary || ''} onChangeText={(v) => updateField('salary', v)} placeholder="e.g., ₹10-15 LPA" />
+        <Field label="Annual Income" value={formData.salary || ''} onChangeText={(v) => updateField('salary', v)} placeholder="e.g., Rs 10-15 LPA" />
       </Section>
 
-      {/* About Me */}
       <Section title="About Me">
         <Field 
           label="About Yourself" 
           value={formData.about} 
           onChangeText={(v) => updateField('about', v)} 
           multiline 
-          placeholder="Write about yourself, your interests, hobbies, and what you're looking for..."
+          placeholder="Write about yourself, your interests, hobbies..."
         />
       </Section>
 
-      {/* Save Button */}
       <TouchableOpacity 
         style={[styles.saveButton, isSaving && styles.saveButtonDisabled]}
         onPress={handleSave}
@@ -221,144 +214,30 @@ export function ProfileEditScreen({ profile, onSave, isSaving }: ProfileEditScre
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  photoSection: {
-    alignItems: 'center',
-    paddingVertical: SPACING.lg,
-    backgroundColor: COLORS.surface,
-  },
-  photo: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    borderWidth: 3,
-    borderColor: COLORS.primary,
-  },
-  changePhotoBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: COLORS.primary,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
-    borderRadius: BORDER_RADIUS.round,
-    marginTop: SPACING.sm,
-    gap: SPACING.xs,
-  },
-  changePhotoText: {
-    color: COLORS.text.inverse,
-    fontSize: FONT_SIZE.sm,
-    fontWeight: '600',
-  },
-  photoHint: {
-    fontSize: FONT_SIZE.xs,
-    color: COLORS.text.light,
-    marginTop: SPACING.sm,
-  },
-  section: {
-    backgroundColor: COLORS.surface,
-    marginTop: SPACING.sm,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.md,
-  },
-  sectionTitle: {
-    fontSize: FONT_SIZE.md,
-    fontWeight: '700',
-    color: COLORS.primary,
-    marginBottom: SPACING.md,
-  },
-  sectionContent: {
-    gap: SPACING.sm,
-  },
-  field: {
-    marginBottom: SPACING.sm,
-  },
-  fieldLabel: {
-    fontSize: FONT_SIZE.sm,
-    color: COLORS.text.tertiary,
-    marginBottom: SPACING.xs,
-  },
-  fieldInput: {
-    backgroundColor: COLORS.background,
-    borderRadius: BORDER_RADIUS.sm,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
-    fontSize: FONT_SIZE.md,
-    color: COLORS.text.primary,
-    borderWidth: 1,
-    borderColor: COLORS.border.light,
-  },
-  fieldInputMultiline: {
-    minHeight: 100,
-    textAlignVertical: 'top',
-  },
-  selectButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: COLORS.background,
-    borderRadius: BORDER_RADIUS.sm,
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
-    borderWidth: 1,
-    borderColor: COLORS.border.light,
-  },
-  selectText: {
-    fontSize: FONT_SIZE.md,
-    color: COLORS.text.primary,
-  },
-  selectPlaceholder: {
-    color: COLORS.text.light,
-  },
-  optionsList: {
-    backgroundColor: COLORS.surface,
-    borderRadius: BORDER_RADIUS.sm,
-    marginTop: SPACING.xs,
-    borderWidth: 1,
-    borderColor: COLORS.border.light,
-    overflow: 'hidden',
-  },
-  option: {
-    paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: COLORS.border.light,
-  },
-  optionSelected: {
-    backgroundColor: COLORS.primaryLight,
-  },
-  optionText: {
-    fontSize: FONT_SIZE.md,
-    color: COLORS.text.secondary,
-  },
-  optionTextSelected: {
-    color: COLORS.primary,
-    fontWeight: '600',
-  },
-  saveButton: {
-    backgroundColor: COLORS.primary,
-    marginHorizontal: SPACING.md,
-    marginTop: SPACING.lg,
-    paddingVertical: SPACING.md,
-    borderRadius: BORDER_RADIUS.md,
-    alignItems: 'center',
-  },
-  saveButtonDisabled: {
-    opacity: 0.7,
-  },
-  saveButtonText: {
-    color: COLORS.text.inverse,
-    fontSize: FONT_SIZE.md,
-    fontWeight: '700',
-  },
-  bottomPadding: {
-    height: SPACING.xxxl,
-  },
+  container: { flex: 1, backgroundColor: COLORS.background },
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  photoSection: { alignItems: 'center', paddingVertical: SPACING.lg, backgroundColor: COLORS.surface },
+  photo: { width: 100, height: 100, borderRadius: 50, borderWidth: 3, borderColor: COLORS.primary },
+  changePhotoBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.primary, paddingHorizontal: SPACING.md, paddingVertical: SPACING.sm, borderRadius: BORDER_RADIUS.round, marginTop: SPACING.sm, gap: SPACING.xs },
+  changePhotoText: { color: COLORS.text.inverse, fontSize: FONT_SIZE.sm, fontWeight: '600' },
+  photoHint: { fontSize: FONT_SIZE.xs, color: COLORS.text.light, marginTop: SPACING.sm },
+  section: { backgroundColor: COLORS.surface, marginTop: SPACING.sm, paddingHorizontal: SPACING.md, paddingVertical: SPACING.md },
+  sectionTitle: { fontSize: FONT_SIZE.md, fontWeight: '700', color: COLORS.primary, marginBottom: SPACING.md },
+  sectionContent: { gap: SPACING.sm },
+  field: { marginBottom: SPACING.sm },
+  fieldLabel: { fontSize: FONT_SIZE.sm, color: COLORS.text.tertiary, marginBottom: SPACING.xs },
+  fieldInput: { backgroundColor: COLORS.background, borderRadius: BORDER_RADIUS.sm, paddingHorizontal: SPACING.md, paddingVertical: SPACING.sm, fontSize: FONT_SIZE.md, color: COLORS.text.primary, borderWidth: 1, borderColor: COLORS.border.light },
+  fieldInputMultiline: { minHeight: 100, textAlignVertical: 'top' },
+  selectButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: COLORS.background, borderRadius: BORDER_RADIUS.sm, paddingHorizontal: SPACING.md, paddingVertical: SPACING.sm, borderWidth: 1, borderColor: COLORS.border.light },
+  selectText: { fontSize: FONT_SIZE.md, color: COLORS.text.primary },
+  selectPlaceholder: { color: COLORS.text.light },
+  optionsList: { backgroundColor: COLORS.surface, borderRadius: BORDER_RADIUS.sm, marginTop: SPACING.xs, borderWidth: 1, borderColor: COLORS.border.light, overflow: 'hidden' },
+  option: { paddingHorizontal: SPACING.md, paddingVertical: SPACING.sm, borderBottomWidth: 1, borderBottomColor: COLORS.border.light },
+  optionSelected: { backgroundColor: COLORS.primaryLight },
+  optionText: { fontSize: FONT_SIZE.md, color: COLORS.text.secondary },
+  optionTextSelected: { color: COLORS.primary, fontWeight: '600' },
+  saveButton: { backgroundColor: COLORS.primary, marginHorizontal: SPACING.md, marginTop: SPACING.lg, paddingVertical: SPACING.md, borderRadius: BORDER_RADIUS.md, alignItems: 'center' },
+  saveButtonDisabled: { opacity: 0.7 },
+  saveButtonText: { color: COLORS.text.inverse, fontSize: FONT_SIZE.md, fontWeight: '700' },
+  bottomPadding: { height: SPACING.xxxl },
 });

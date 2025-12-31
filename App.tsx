@@ -6,7 +6,8 @@ import {
   ChatScreen, 
   ProfileEditScreen, 
   InboxScreen, 
-  ChatListScreen 
+  ChatListScreen,
+  SplashScreen 
 } from './src/screens';
 import { 
   AppHeader, 
@@ -18,15 +19,19 @@ import { useProfile } from './src/hooks';
 import { Match } from './src/types';
 import { COLORS } from './src/constants/theme';
 
-type Screen = 'main' | 'chat';
+type Screen = 'splash' | 'main' | 'chat';
 
 export default function App() {
-  const [currentScreen, setCurrentScreen] = useState<Screen>('main');
+  const [currentScreen, setCurrentScreen] = useState<Screen>('splash');
   const [activeTab, setActiveTab] = useState<TabName>('home');
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [selectedMatch, setSelectedMatch] = useState<Match | null>(null);
   
   const { profile, isSaving, updateProfile } = useProfile();
+
+  const handleSplashFinish = () => {
+    setCurrentScreen('main');
+  };
 
   const handleOpenChat = (match: Match) => {
     setSelectedMatch(match);
@@ -62,6 +67,16 @@ export default function App() {
         Alert.alert('Coming Soon', `${menuId} feature will be available soon!`);
     }
   };
+
+  // Splash screen
+  if (currentScreen === 'splash') {
+    return (
+      <>
+        <StatusBar style="light" />
+        <SplashScreen onFinish={handleSplashFinish} />
+      </>
+    );
+  }
 
   // Chat screen (full screen)
   if (currentScreen === 'chat' && selectedMatch) {
