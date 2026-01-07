@@ -1,5 +1,5 @@
 {
-  "name": "devoteesathee",
+  "name": "devoteesaathi",
   "version": "1.0.0",
   "main": "expo/AppEntry.js",
   "scripts": {
@@ -16,10 +16,12 @@
   ],
   "author": "",
   "license": "ISC",
-  "description": "DevoteeSathee - A professional matrimonial app for devotees",
+  "description": "DevoteeSaathi - A professional matrimonial app for devotees",
   "dependencies": {
+    "@expo/metro-runtime": "~6.1.2",
     "@expo/ngrok": "^4.1.3",
     "@expo/vector-icons": "^14.0.0",
+    "@react-native-community/datetimepicker": "8.4.4",
     "@react-native-community/slider": "5.0.1",
     "babel-preset-expo": "^54.0.9",
     "expo": "^54.0.30",
@@ -29,7 +31,9 @@
     "expo-updates": "~29.0.15",
     "metro-config": "^0.80.0",
     "react": "19.1.0",
-    "react-native": "0.81.5"
+    "react-dom": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-web": "^0.21.0"
   },
   "devDependencies": {
     "@types/react": "~19.1.0",

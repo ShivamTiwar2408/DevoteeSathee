@@ -11,7 +11,7 @@ interface AppHeaderProps {
 }
 
 export function AppHeader({ 
-  title = 'DevoteeSathee', 
+  title = 'DevoteeSaathi', 
   onMenuPress, 
   onNotificationPress,
   notificationCount = 0,

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, TextInput, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet, TextInput, ActivityIndicator, Modal } from 'react-native';
 import Slider from '@react-native-community/slider';
 import { Ionicons } from '@expo/vector-icons';
 import { Profile } from '../types';
 import { COLORS, SPACING, FONT_SIZE, BORDER_RADIUS, SHADOWS } from '../constants/theme';
+import { useAlert } from '../components/AlertModal';
 
 interface ProfileScreenProps { profile: Profile | null; onSave: (profile: Profile) => Promise<boolean>; isSaving: boolean; }
 
@@ -14,8 +15,16 @@ const calculateCompleteness = (profile: Profile): number => {
   return Math.round((filled / PROFILE_FIELDS.length) * 100);
 };
 
-const formatHeight = (cm: number): string => { const feet = Math.floor(cm / 30.48); const inches = Math.round((cm % 30.48) / 2.54); return `${feet}'${inches}"`; };
-const formatSalary = (lpa: number): string => lpa >= 100 ? `₹${(lpa / 100).toFixed(1)} Cr` : `₹${lpa} LPA`;
+const formatHeight = (cm: number | string): string => { 
+  if (typeof cm === 'string') return cm;
+  const feet = Math.floor(cm / 30.48); 
+  const inches = Math.round((cm % 30.48) / 2.54); 
+  return `${feet}'${inches}"`; 
+};
+const formatSalary = (lpa: number | string): string => {
+  if (typeof lpa === 'string') return lpa;
+  return lpa >= 100 ? `₹${(lpa / 100).toFixed(1)} Cr` : `₹${lpa} LPA`;
+};
 
 function CircularProgress({ percentage, size = 80 }: { percentage: number; size?: number }) {
   const color = percentage >= 80 ? '#4CAF50' : percentage >= 50 ? COLORS.primary : '#FF9800';
@@ -47,9 +56,10 @@ function TextAreaField({ label, value, onChange, placeholder }: { label: string;
   return (<View style={styles.fieldContainer}><Text style={styles.fieldLabel}>{label}</Text><TextInput style={[styles.textInput, styles.textArea]} value={value || ''} onChangeText={onChange} placeholder={placeholder} placeholderTextColor={COLORS.text.light} multiline numberOfLines={4} textAlignVertical="top" /></View>);
 }
 
-function SliderField({ label, value, min, max, onChange, suffix, format }: { label: string; value: number; min: number; max: number; onChange: (v: number) => void; suffix?: string; format?: (v: number) => string }) {
-  const displayValue = format ? format(value) : `${value}${suffix || ''}`;
-  return (<View style={styles.fieldContainer}><View style={styles.sliderHeader}><Text style={styles.fieldLabel}>{label}</Text><Text style={styles.sliderValue}>{displayValue}</Text></View><Slider style={styles.slider} minimumValue={min} maximumValue={max} step={1} value={value} onValueChange={onChange} minimumTrackTintColor={COLORS.primary} maximumTrackTintColor={COLORS.border.default} thumbTintColor={COLORS.primary} /></View>);
+function SliderField({ label, value, min, max, onChange, suffix, format }: { label: string; value: number | string; min: number; max: number; onChange: (v: number) => void; suffix?: string; format?: (v: number | string) => string }) {
+  const numValue = typeof value === 'string' ? min : value;
+  const displayValue = format ? format(numValue) : `${numValue}${suffix || ''}`;
+  return (<View style={styles.fieldContainer}><View style={styles.sliderHeader}><Text style={styles.fieldLabel}>{label}</Text><Text style={styles.sliderValue}>{displayValue}</Text></View><Slider style={styles.slider} minimumValue={min} maximumValue={max} step={1} value={numValue} onValueChange={onChange} minimumTrackTintColor={COLORS.primary} maximumTrackTintColor={COLORS.border.default} thumbTintColor={COLORS.primary} /></View>);
 }
 
 function ChipSelect({ label, value, options, onChange }: { label: string; value?: string; options: string[]; onChange: (v: string) => void }) {
@@ -62,6 +72,8 @@ export function ProfileScreen({ profile, onSave, isSaving }: ProfileScreenProps)
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<Profile | null>(null);
   const [expandedSection, setExpandedSection] = useState<string | null>('basic');
+  const [showMediaModal, setShowMediaModal] = useState(false);
+  const { showAlert, AlertComponent } = useAlert();
 
   useEffect(() => { if (profile) setFormData({ ...profile }); }, [profile]);
 
@@ -69,9 +81,9 @@ export function ProfileScreen({ profile, onSave, isSaving }: ProfileScreenProps)
 
   const completeness = calculateCompleteness(formData);
   const updateField = (field: keyof Profile, value: string | number) => setFormData(prev => prev ? { ...prev, [field]: value } : null);
-  const handleSave = async () => { if (!formData) return; const success = await onSave(formData); if (success) { setIsEditing(false); Alert.alert('Success', 'Profile updated!'); } };
+  const handleSave = async () => { if (!formData) return; const success = await onSave(formData); if (success) { setIsEditing(false); showAlert('Success', 'Profile updated!', undefined, 'success'); } };
   const toggleSection = (section: string) => setExpandedSection(expandedSection === section ? null : section);
-  const handleAddMedia = () => Alert.alert('Add Media', 'Choose an option', [{ text: 'Take Photo' }, { text: 'Record Video' }, { text: 'Choose from Gallery' }, { text: 'Cancel', style: 'cancel' }]);
+  const handleAddMedia = () => setShowMediaModal(true);
 
   if (!isEditing) {
     return (
@@ -95,6 +107,32 @@ export function ProfileScreen({ profile, onSave, isSaving }: ProfileScreenProps)
         <ViewSection title="Lifestyle" icon="leaf-outline"><ViewRow label="Diet" value={formData.diet} /><ViewRow label="Smoking" value={formData.smoking} /><ViewRow label="Drinking" value={formData.drinking} /></ViewSection>
         <ViewSection title="About Me" icon="document-text-outline"><Text style={styles.aboutText}>{formData.about || 'Not specified'}</Text></ViewSection>
         <View style={styles.bottomPadding} />
+        
+        {/* Media Options Modal */}
+        <Modal visible={showMediaModal} transparent animationType="fade">
+          <View style={styles.mediaModalOverlay}>
+            <View style={styles.mediaModalContent}>
+              <Text style={styles.mediaModalTitle}>Add Media</Text>
+              <TouchableOpacity style={styles.mediaModalOption} onPress={() => setShowMediaModal(false)}>
+                <Ionicons name="camera" size={24} color={COLORS.primary} />
+                <Text style={styles.mediaModalOptionText}>Take Photo</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.mediaModalOption} onPress={() => setShowMediaModal(false)}>
+                <Ionicons name="videocam" size={24} color={COLORS.primary} />
+                <Text style={styles.mediaModalOptionText}>Record Video</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.mediaModalOption} onPress={() => setShowMediaModal(false)}>
+                <Ionicons name="images" size={24} color={COLORS.primary} />
+                <Text style={styles.mediaModalOptionText}>Choose from Gallery</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.mediaModalCancelBtn} onPress={() => setShowMediaModal(false)}>
+                <Text style={styles.mediaModalCancelText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+        
+        <AlertComponent />
       </ScrollView>
     );
   }
@@ -111,6 +149,7 @@ export function ProfileScreen({ profile, onSave, isSaving }: ProfileScreenProps)
       <EditSection title="Lifestyle" icon="leaf-outline" expanded={expandedSection === 'lifestyle'} onToggle={() => toggleSection('lifestyle')}><ChipSelect label="Diet" value={formData.diet} options={['Vegetarian', 'Non-Vegetarian', 'Eggetarian', 'Vegan']} onChange={v => updateField('diet', v)} /><ChipSelect label="Smoking" value={formData.smoking} options={['No', 'Occasionally', 'Yes']} onChange={v => updateField('smoking', v)} /><ChipSelect label="Drinking" value={formData.drinking} options={['No', 'Occasionally', 'Yes']} onChange={v => updateField('drinking', v)} /></EditSection>
       <EditSection title="About Me" icon="document-text-outline" expanded={expandedSection === 'about'} onToggle={() => toggleSection('about')}><TextAreaField label="Tell us about yourself" value={formData.about} onChange={v => updateField('about', v)} placeholder="Your interests, hobbies..." /></EditSection>
       <View style={styles.bottomPadding} />
+      <AlertComponent />
     </ScrollView>
   );
 }
@@ -167,4 +206,11 @@ const styles = StyleSheet.create({
   chipSelected: { backgroundColor: COLORS.primaryLight, borderColor: COLORS.primary },
   chipText: { fontSize: FONT_SIZE.xs, color: COLORS.text.secondary },
   chipTextSelected: { color: COLORS.primary, fontWeight: '600' },
+  mediaModalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
+  mediaModalContent: { backgroundColor: COLORS.surface, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: SPACING.lg, paddingBottom: 34 },
+  mediaModalTitle: { fontSize: FONT_SIZE.lg, fontWeight: '600', color: COLORS.text.primary, textAlign: 'center', marginBottom: SPACING.lg },
+  mediaModalOption: { flexDirection: 'row', alignItems: 'center', gap: SPACING.md, paddingVertical: SPACING.md, borderBottomWidth: 1, borderBottomColor: COLORS.border.light },
+  mediaModalOptionText: { fontSize: FONT_SIZE.md, color: COLORS.text.primary },
+  mediaModalCancelBtn: { marginTop: SPACING.md, paddingVertical: SPACING.md, alignItems: 'center' },
+  mediaModalCancelText: { fontSize: FONT_SIZE.md, color: COLORS.text.tertiary, fontWeight: '500' },
 });

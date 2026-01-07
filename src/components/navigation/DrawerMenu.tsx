@@ -109,7 +109,7 @@ export function DrawerMenu({ visible, profile, onClose, onMenuPress }: DrawerMen
           </ScrollView>
 
           {/* App Version */}
-          <Text style={styles.version}>DevoteeSathee v1.0.0</Text>
+          <Text style={styles.version}>DevoteeSaathi v1.0.0</Text>
         </View>
       </View>
     </Modal>

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "DevoteeSathee",
+    "name": "DevoteeSaathi",
     "slug": "devoteesathee",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -18,14 +18,19 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.devoteesathee.app"
+      "bundleIdentifier": "com.devoteesaathi.app",
+      "buildNumber": "2",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#E91E63"
       },
-      "package": "com.devoteesathee.app"
+      "package": "com.devoteesaathi.app",
+      "versionCode": 2
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -35,6 +40,9 @@
         "projectId": "2d7c390e-9bf8-4a23-ae2c-7aea23d3f2c1"
       }
     },
-    "owner": "shivamtiwari2408"
+    "owner": "shivamtiwari2408",
+    "plugins": [
+      "@react-native-community/datetimepicker"
+    ]
   }
 }

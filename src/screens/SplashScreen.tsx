@@ -57,16 +57,14 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
 
     // Status text sequence
     const timer1 = setTimeout(() => setStatusText('Connecting...'), 500);
-    const timer2 = setTimeout(() => setStatusText('Already logged in'), 1500);
-    const timer3 = setTimeout(() => setStatusText('Welcome back!'), 2500);
-    const timer4 = setTimeout(() => onFinish(), 3500);
+    const timer2 = setTimeout(() => setStatusText('Welcome!'), 1500);
+    const timer3 = setTimeout(() => onFinish(), 2500);
 
     return () => {
       heartAnimation.stop();
       clearTimeout(timer1);
       clearTimeout(timer2);
       clearTimeout(timer3);
-      clearTimeout(timer4);
     };
   }, []);
 
@@ -101,7 +99,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({ onFinish }) => {
         </Animated.View>
 
         {/* App Name */}
-        <Text style={styles.appName}>DevoteeSathee</Text>
+        <Text style={styles.appName}>DevoteeSaathi</Text>
         <Text style={styles.tagline}>Find Your Divine Match</Text>
 
         {/* Decorative elements */}

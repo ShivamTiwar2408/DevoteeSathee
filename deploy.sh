@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# DevoteeSathee - Deploy Script
+# DevoteeSaathi - Deploy Script
 # Usage: 
 #   ./deploy.sh          - Publish update to EAS (permanent URL)
 #   ./deploy.sh dev      - Start local dev server with tunnel
@@ -8,7 +8,7 @@
 
 set -e
 
-APP_NAME="DevoteeSathee"
+APP_NAME="DevoteeSaathi"
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -65,7 +65,7 @@ case "${1:-publish}" in
     # SSH and setup
     echo "🔧 Setting up on VM..."
     ssh -i $SSH_KEY $VM_USER@$VM_IP << 'ENDSSH'
-      cd ~/DevoteeSathee
+      cd ~/DevoteeSaathi
       pkill -f "expo" 2>/dev/null || true
       pkill -f "node.*metro" 2>/dev/null || true
       sleep 2

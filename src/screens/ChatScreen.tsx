@@ -15,7 +15,7 @@ import {
   EmptyChat,
   LoadingScreen,
 } from '../components';
-import { useChat } from '../hooks';
+import { useAppChat } from '../hooks';
 import { Message, Match } from '../types';
 import { COLORS, SPACING } from '../constants/theme';
 
@@ -34,10 +34,7 @@ export function ChatScreen({ match, onBack }: ChatScreenProps) {
     isTyping,
     currentUserId,
     sendMessage,
-  } = useChat({
-    conversationId: `conv_${match.id}`,
-    participantId: match.id,
-  });
+  } = useAppChat(`conv_${match.id}`, match.id);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {

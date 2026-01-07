@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { SwipeableProfiles, LoadingScreen, ErrorScreen } from '../components';
-import { useMatches } from '../hooks';
+import { useMatchesStore, matchesActions } from '../store';
 import { Match } from '../types';
 import { COLORS } from '../constants/theme';
 
@@ -10,19 +10,29 @@ interface HomeScreenProps {
 }
 
 export function HomeScreen({ onOpenChat }: HomeScreenProps) {
-  const { matches, isLoading, error, retry } = useMatches();
+  const { matches, dispatch } = useMatchesStore();
 
-  if (isLoading) {
+  useEffect(() => {
+    if (matches.items.length === 0 && !matches.isLoading) {
+      matchesActions.fetchMatches()(dispatch);
+    }
+  }, [dispatch, matches.items.length, matches.isLoading]);
+
+  const handleRetry = () => {
+    matchesActions.fetchMatches()(dispatch);
+  };
+
+  if (matches.isLoading) {
     return <LoadingScreen message="Finding your matches..." />;
   }
 
-  if (error && matches.length === 0) {
-    return <ErrorScreen message={error} onRetry={retry} />;
+  if (matches.error && matches.items.length === 0) {
+    return <ErrorScreen message={matches.error} onRetry={handleRetry} />;
   }
 
   return (
     <View style={styles.container}>
-      <SwipeableProfiles matches={matches} onChat={onOpenChat} />
+      <SwipeableProfiles matches={matches.items} onChat={onOpenChat} />
     </View>
   );
 }

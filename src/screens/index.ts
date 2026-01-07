@@ -4,3 +4,8 @@ export { ProfileScreen } from './ProfileScreen';
 export { InboxScreen } from './InboxScreen';
 export { ChatListScreen } from './ChatListScreen';
 export { SplashScreen } from './SplashScreen';
+export { WelcomeScreen } from './WelcomeScreen';
+export { RegisterScreen } from './RegisterScreen';
+export { LoginScreen } from './LoginScreen';
+export { OTPVerificationScreen } from './OTPVerificationScreen';
+export { CreatePasswordScreen } from './CreatePasswordScreen';

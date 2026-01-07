@@ -1,4 +1,4 @@
-// Core types for DevoteeSathee app
+// Core types for DevoteeSaathi app
 
 export interface Profile {
   id: string;
@@ -11,7 +11,7 @@ export interface Profile {
   introVideo?: string;
   
   // Physical Attributes
-  height?: number; // in cm
+  height?: number | string; // number (cm) for editing, string for display
   weight?: number; // in kg
   bodyType?: 'Slim' | 'Average' | 'Athletic' | 'Heavy';
   complexion?: 'Fair' | 'Wheatish' | 'Dark';
@@ -39,7 +39,7 @@ export interface Profile {
   profession: string;
   company?: string;
   workingStatus?: 'Working' | 'Not Working' | 'Student';
-  salary?: number; // Annual in LPA
+  salary?: number | string; // number (LPA) for editing, string for display
   
   // Family Details
   familyType?: 'Joint' | 'Nuclear';

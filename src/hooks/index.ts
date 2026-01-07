@@ -1,3 +1,2 @@
-export { useMatches } from './useMatches';
-export { useProfile } from './useProfile';
-export { useChat } from './useChat';
+// Store-based hooks
+export { useAppProfile, useAppMatches, useAppChat, useAppInbox, useAppUI } from './useAppState';

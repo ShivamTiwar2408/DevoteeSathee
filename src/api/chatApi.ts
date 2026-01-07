@@ -1,4 +1,5 @@
 import { ApiResponse, Message } from '../types';
+import { logger } from '../utils/logger';
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -29,7 +30,10 @@ const getRandomResponse = (): string => {
 
 export const chatApi = {
   async getMessages(conversationId: string): Promise<ApiResponse<Message[]>> {
+    const startTime = Date.now();
     await delay(500 + Math.random() * 500);
+    
+    logger.debug('chatApi.getMessages', { conversationId, duration: Date.now() - startTime });
     
     // Return empty array for new conversations
     // In production, this would fetch from backend
@@ -44,6 +48,7 @@ export const chatApi = {
     text: string,
     senderId: string
   ): Promise<ApiResponse<Message>> {
+    const startTime = Date.now();
     await delay(300 + Math.random() * 200);
 
     const message: Message = {
@@ -53,6 +58,12 @@ export const chatApi = {
       timestamp: new Date(),
       status: 'sent',
     };
+
+    logger.debug('chatApi.sendMessage', { 
+      conversationId, 
+      messageId: message.id, 
+      duration: Date.now() - startTime 
+    });
 
     return {
       success: true,
@@ -72,6 +83,8 @@ export const chatApi = {
       status: 'delivered',
     };
 
+    logger.debug('chatApi.getAutoResponse', { conversationId, messageId: message.id });
+
     return {
       success: true,
       data: message,
@@ -80,6 +93,7 @@ export const chatApi = {
 
   async markAsRead(conversationId: string, messageIds: string[]): Promise<ApiResponse<void>> {
     await delay(100);
+    logger.debug('chatApi.markAsRead', { conversationId, messageCount: messageIds.length });
     return {
       success: true,
       data: undefined,

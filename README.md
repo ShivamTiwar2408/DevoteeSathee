@@ -1,4 +1,4 @@
-# DevoteeSathee - Matrimonial App
+# DevoteeSaathi - Matrimonial App
 
 A professional matrimonial app for devotees, built with React Native and Expo.
 
@@ -32,7 +32,7 @@ The app features:
 ### Installation
 
 ```bash
-cd DevoteeSathee
+cd DevoteeSaathi
 npm install
 ```
 
@@ -49,24 +49,11 @@ Scan the QR code with Expo Go app.
 npx expo start --tunnel
 ```
 
-### Remote VM Deployment
-
-```bash
-# Copy to VM
-rsync -avz --exclude 'node_modules' -e "ssh -i ~/.ssh/id_ecdsa" DevoteeSathee/ ubuntu@<VM_IP>:~/DevoteeSathee/
-
-# SSH and run
-ssh -i ~/.ssh/id_ecdsa ubuntu@<VM_IP>
-cd ~/DevoteeSathee
-npm install
-npx expo start --tunnel
-```
-
 ## Project Structure
 
 ```
-DevoteeSathee/
-├── App.js          # Main app with all components
+DevoteeSaathi/
+├── App.tsx         # Main app with all components
 ├── app.json        # Expo configuration
 ├── package.json    # Dependencies
 └── assets/         # App icons and images

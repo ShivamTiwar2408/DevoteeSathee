@@ -1,1 +1,2 @@
-export { Header } from './Header';
+// Layout components
+// Header moved to navigation/AppHeader.tsx

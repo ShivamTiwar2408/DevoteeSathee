@@ -1,1 +1,3 @@
-// Profile components - main profile screen is now in screens/ProfileScreen.tsx
+// Profile components
+// Main profile editing is in screens/ProfileScreen.tsx
+// Add reusable profile components here as needed
